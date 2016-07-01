@@ -193,7 +193,7 @@ int esp_tsocket_send(int sckfd, const char* msg, int len)
 
 /**
  * receive message
- * 
+ *
  * @param sckfd socket fd
  * @param buffer char* buffer to receive message
  * @param len how many data to be read
@@ -222,6 +222,24 @@ int esp_socket_recv(int sckfd, char* buffer, int len)
         return -1;
     }
     return 0;
+}
+
+/**
+ * get socket local IPv4 addr
+ *
+ * @param sckfd socket fd
+ * @return socket local IPv4 addr or -1 when fail
+ */
+unsigned int esp_socket_getsockname_local_addr4(int sckfd)
+{
+    assert(sckfd>0);
+    struct sockaddr_in local_addr;
+    socklen_t len = sizeof(local_addr);
+    if (getsockname(sckfd, (struct sockaddr *)&local_addr, &len)==0) {
+        return local_addr.sin_addr.s_addr;
+    } else {
+        return -1;
+    }
 }
 
 /**

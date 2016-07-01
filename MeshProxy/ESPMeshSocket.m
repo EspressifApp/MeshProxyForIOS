@@ -301,7 +301,8 @@
             [ESPMeshLog debug:DEBUG_ON Class:[self class] Message:msg];
             
             // wait is device available
-            NSObject *token = [self waitDeviceAvailableToken];
+            int timeout = [proxyTask isReadOnlyTask] ? [proxyTask getTaskTimeout] : DEVICE_AVAILABLE_TIMEOUT;
+            NSObject *token = [self waitDeviceAvailableToken:timeout];
             if (token == nil) {
                 msg = @"loop() waitDeviceAvailableToken() get null, break";
                 [ESPMeshLog warn:DEBUG_ON Class:[self class] Message:msg];
@@ -812,9 +813,10 @@
 /**
  * wait the mesh root device is available token
  *
+ * @param timeout timeout in milliseconds
  * @return the mesh root device is available token or null(if timeout)
  */
-- (NSObject *) waitDeviceAvailableToken
+- (NSObject *) waitDeviceAvailableToken:(int) timeout
 {
     NSObject *deviceAvailableToken = nil;
     NSString *msg = nil;
@@ -823,7 +825,7 @@
         return deviceAvailableToken;
     }
     @try {
-        deviceAvailableToken = [_deviceAvaibableToken takeUntilTimeout:DEVICE_AVAILABLE_TIMEOUT];
+        deviceAvailableToken = [_deviceAvaibableToken takeUntilTimeout:timeout];
     }
     @catch (ESPInterruptException *exception) {
         NSLog(@"ESPMeshSocket waitDeviceAvailableToken() takeUntilTimeout ESPInterruptException: %@",exception);

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		075A90EE1D26411200621698 /* ESPJsonUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 075A90ED1D26411200621698 /* ESPJsonUtil.m */; };
 		07DAF61C1CE5B4650086BE3C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DAF61B1CE5B4650086BE3C /* main.m */; };
 		07DAF61F1CE5B4650086BE3C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DAF61E1CE5B4650086BE3C /* AppDelegate.m */; };
 		07DAF6221CE5B4650086BE3C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 07DAF6211CE5B4650086BE3C /* ViewController.m */; };
@@ -47,6 +48,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		075A90EC1D26411200621698 /* ESPJsonUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESPJsonUtil.h; sourceTree = "<group>"; };
+		075A90ED1D26411200621698 /* ESPJsonUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESPJsonUtil.m; sourceTree = "<group>"; };
 		07DAF6171CE5B4650086BE3C /* MeshProxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MeshProxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		07DAF61B1CE5B4650086BE3C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		07DAF61D1CE5B4650086BE3C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -133,6 +136,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		075A90EB1D26410000621698 /* json */ = {
+			isa = PBXGroup;
+			children = (
+				075A90EC1D26411200621698 /* ESPJsonUtil.h */,
+				075A90ED1D26411200621698 /* ESPJsonUtil.m */,
+			);
+			name = json;
+			sourceTree = "<group>";
+		};
 		07DAF60E1CE5B4650086BE3C = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +193,7 @@
 		07DAF6311CE5B4740086BE3C /* esp_core */ = {
 			isa = PBXGroup;
 			children = (
+				075A90EB1D26410000621698 /* json */,
 				07DAF63F1CE5B4DD0086BE3C /* macro */,
 				07DAF6411CE5B4EC0086BE3C /* exception */,
 				07DAF6401CE5B4E40086BE3C /* collections */,
@@ -425,6 +438,7 @@
 				07DAF64E1CE5B5AA0086BE3C /* ESPBlockingMutableArray.m in Sources */,
 				07DAF6791CE5B5E20086BE3C /* ESPMeshPackageUtil.m in Sources */,
 				07DAF61C1CE5B4650086BE3C /* main.m in Sources */,
+				075A90EE1D26411200621698 /* ESPJsonUtil.m in Sources */,
 				07DAF64A1CE5B59D0086BE3C /* ESPInterruptException.m in Sources */,
 				07DAF67A1CE5B5E20086BE3C /* ESPMeshOption.m in Sources */,
 				07DAF63B1CE5B4C40086BE3C /* ESPDeviceType.m in Sources */,
@@ -576,6 +590,7 @@
 				07DAF6301CE5B4650086BE3C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

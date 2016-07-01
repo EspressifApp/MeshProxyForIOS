@@ -25,6 +25,13 @@
 @interface ESPMeshCommunicationUtils : NSObject
 
 /**
+ * Get a new long socket task serial
+ *
+ * @return a new long socket task serial
+ */
++ (int) GenerateLongSocketSerial;
+
+/**
  * Post Http get request to target url
  *
  * @param url the url of the http request

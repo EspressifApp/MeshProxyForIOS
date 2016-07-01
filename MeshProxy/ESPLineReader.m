@@ -10,7 +10,7 @@
 
 @interface ESPLineReader()
 
-@property (nonatomic, weak) NSData* data;
+@property (nonatomic, strong) NSMutableData* data;
 @property (nonatomic, assign) NSUInteger total;
 @property (nonatomic, assign) NSUInteger current;
 @property (nonatomic, assign) Byte lastByte;
@@ -27,7 +27,7 @@
 {
     self = [super init];
     if (self) {
-        _data = data;
+        _data = data==nil ? [[NSMutableData alloc]init] : [NSMutableData dataWithData:data];
         _total = [data length];
         _current = 0;
         _lastByte = -1;
@@ -44,8 +44,22 @@
 
 - (instancetype)initWithStr:(NSString *)str
 {
-    NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *data = str==nil ? nil : [str dataUsingEncoding:NSUTF8StringEncoding];
     return [self initWithData: data];
+}
+
+- (void)appendData:(NSData *)data
+{
+    [_data appendData:data];
+    _total += [data length];
+}
+
+- (void) appendStr: (NSString *)str
+{
+    if (str!=nil) {
+        NSData *data = [str dataUsingEncoding:NSUTF8StringEncoding];
+        [self appendData:data];
+    }
 }
 
 - (NSString *)readLine
@@ -106,7 +120,7 @@
     }
     
     if (oneByte!=LF && oneByte!=CR) {
-//        perror("ESPLineReader() readLine() last byte isn't LF and CR");
+        //        perror("ESPLineReader() readLine() last byte isn't LF and CR");
         return nil;
     }
     

@@ -133,6 +133,44 @@
 }
 
 /**
+ * get local port
+ *
+ * @return local port
+ */
+- (int) localPort
+{
+    @synchronized(self) {
+        return esp_socket_getsockname_local_port(_socket_fd);
+    }
+}
+
+/**
+ * get local IPv4 addr
+ *
+ * @return local IPv4 addr
+ */
+- (NSString *) localInetAddr4
+{
+    @synchronized(self) {
+        unsigned int ipv4 = esp_socket_getsockname_local_addr4(_socket_fd);
+        if (ipv4==-1) {
+            return nil;
+        } else {
+            NSMutableString *mstr = [[NSMutableString alloc]init];
+            for (int i=0; i<4; i++) {
+                if (i!=0) {
+                    [mstr appendString:@"."];
+                }
+                int value = ipv4&0xff;
+                [mstr appendFormat:@"%d",value];
+                ipv4>>=8;
+            }
+            return mstr;
+        }
+    }
+}
+
+/**
  * read data from the socket
  *
  * @return data from the socket in NSData format or nil if fail
@@ -289,7 +327,7 @@
     {
         long result = esp_tsocket_send(_socket_fd, [data bytes], (int)nBytes);
         return result==0;
-
+        
     }
 }
 

@@ -89,6 +89,14 @@ int esp_socket_recv(int sckfd, char* buffer, int len);
 int esp_socket_wait_available(int sckfd, int timeout);
 
 /**
+ * get socket local IPv4 addr
+ *
+ * @param sckfd socket fd
+ * @return socket local IPv4 addr or -1 when fail
+ */
+unsigned int esp_socket_getsockname_local_addr4(int sckfd);
+
+/**
  * get socket local port
  *
  * @param sckfd socket fd
@@ -139,7 +147,7 @@ int esp_usocket_setopt_broadcast(int udpsckfd, int opt);
 
 /**
  * send message to udp socket
- * 
+ *
  * @udpsckfd udp socket fd
  * @param msg mssage in char* format to be sent
  * @param len length of message

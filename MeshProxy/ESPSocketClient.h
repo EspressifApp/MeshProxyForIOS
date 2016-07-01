@@ -70,6 +70,20 @@
  */
 - (NSUInteger) available;
 
+/**
+ * get local port
+ *
+ * @return local port
+ */
+- (int) localPort;
+
+/**
+ * get local IPv4 addr
+ *
+ * @return local IPv4 addr
+ */
+- (NSString *) localInetAddr4;
+
 #pragma connect
 /**
  * connect to remote by ip inetAddress
@@ -111,7 +125,7 @@
 #pragma write
 /**
  * write data to the socket
- * 
+ *
  * @param data the data to be sent
  * @param offset offset to be sent
  * @param nBytes number of bytes to be sent

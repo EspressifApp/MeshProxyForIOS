@@ -10,6 +10,7 @@
 #import "ESPMeshLog.h"
 #import "ESPProxyServer.h"
 #import "ESPProxyTask.h"
+#import "ESPJsonUtil.h"
 
 #define DEBUG_ON                NO
 #define KEY_STATUS              @"status"
@@ -113,6 +114,7 @@ static volatile int SERIAL_LONG_TASK = 1;
         msg = [NSString stringWithFormat:@"Post json0 = %@",json0];
         [ESPMeshLog info:DEBUG_ON Class:[self class] Message:msg];
         NSData* jsonData = [NSJSONSerialization dataWithJSONObject:json0 options:kNilOptions error:nil];
+        jsonData = [ESPJsonUtil retransferData:jsonData];
         [localRequest setHTTPBody:jsonData];
     }
     
@@ -128,7 +130,7 @@ static volatile int SERIAL_LONG_TASK = 1;
     
     NSDictionary *receivedDict = [NSJSONSerialization JSONObjectWithData:receivedData options:NSJSONReadingMutableLeaves error:&error];
     
-    if ([self isHttpCloseResponse:receivedDict]) {
+    if ([self isHttpCloseResponse:receivedDict]&&!nonResponse) {
         if (DEBUG_ON) {
             NSLog(@"ESPMeshCommunicationUtils executeHttpRequest fail to receive response2");
         }

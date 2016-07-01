@@ -27,6 +27,20 @@
 - (id) initWithStr: (NSString *)str;
 
 /**
+ * append data to ESPLineReader
+ *
+ * @data data to be appended
+ */
+- (void) appendData: (NSData *)data;
+
+/**
+ * append str to ESPLineReader
+ *
+ * @str str to be appended
+ */
+- (void) appendStr: (NSString *)str;
+
+/**
  * read one line
  *
  * @return one line
