@@ -12,21 +12,23 @@
 @interface ESPIOTAddress : NSObject
 
 // device's ssid
-@property (nonatomic, strong) NSString *ssid;
+@property (nonatomic, strong) NSString *espSsid;
 // the root device's bssid(only mesh device has root device)
-@property (nonatomic, strong) NSString *rootBssid;
+@property (nonatomic, strong) NSString *espRootBssid;
 // device's bssid
-@property (nonatomic, strong) NSString *bssid;
+@property (nonatomic, strong) NSString *espBssid;
 // device's inetAddress
-@property (nonatomic, strong) NSString *inetAddress;
+@property (nonatomic, strong) NSString *espInetAddress;
 // device's type
-@property (nonatomic, strong) ESPDeviceType *deviceType;
+@property (nonatomic, strong) ESPDeviceType *espDeviceType;
 // device's parent's bssid
-@property (nonatomic, strong) NSString *parentBssid;
+@property (nonatomic, strong) NSString *espParentBssid;
 // whether the device is mesh or not
-@property (nonatomic, assign) BOOL isMeshDevice;
+@property (nonatomic, assign) BOOL espIsMeshDevice;
+// current rom version
+@property (nonatomic, strong) NSString *espRomVersionCurrent;
 
-+ (ESPIOTAddress *)EmptyIOTAddress;
++ (ESPIOTAddress *)EspEmptyIOTAddress;
 
 - (instancetype) initWithBssid:(NSString *)bssid InetAddress:(NSString *)inetAddress;
 

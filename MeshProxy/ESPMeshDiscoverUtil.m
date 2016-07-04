@@ -18,8 +18,8 @@
 + (NSSet *) discoverIOTMeshDevicesOnRoot2:(ESPIOTAddress *)rootIOTAddress Bssid:(NSString *)deviceBssid
 {
     NSMutableSet *iotMeshAddressSet = [[NSMutableSet alloc]init];
-    NSString *rootInetAddress = [rootIOTAddress inetAddress];
-    NSString *rootBssid = [rootIOTAddress bssid];
+    NSString *rootInetAddress = rootIOTAddress.espInetAddress;
+    NSString *rootBssid = rootIOTAddress.espBssid;
     if (deviceBssid != nil) {
         ESPIOTAddress *iotAddress = [ESPMeshNetUtil2 GetTopoIOTAddress5:rootInetAddress Bssid:deviceBssid];
         if (iotAddress!=nil) {
@@ -55,7 +55,7 @@
             
             if (bssid==nil) {
                 for (ESPIOTAddress *iotAddress in rootDeviceArray) {
-                    [iotAddress setRootBssid:[iotAddress bssid]];
+                    iotAddress.espRootBssid = iotAddress.espBssid;
                 }
             }
             
@@ -76,7 +76,7 @@
     __block NSMutableSet *allDeviceSet = [[NSMutableSet alloc]init];
     for (ESPIOTAddress *rootIOTAddress in rootDeviceSet) {
         // if the device isn't mesh device ignore it
-        if (![rootIOTAddress isMeshDevice]) {
+        if (!rootIOTAddress.espIsMeshDevice) {
             continue;
         }
         dispatch_async(queue, ^{
@@ -103,7 +103,7 @@
         }
         if ([allDeviceSet count] == 0) {
             for (ESPIOTAddress *rootDevice in rootDeviceSet) {
-                if ([[rootDevice bssid] isEqualToString:bssid]) {
+                if ([rootDevice.espBssid isEqualToString:bssid]) {
                     [allDeviceSet addObject:rootDevice];
                     break;
                 }

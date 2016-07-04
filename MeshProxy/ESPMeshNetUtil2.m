@@ -59,8 +59,8 @@
     self = [super init];
     if (self) {
         ESPIOTAddress *iotAddress = [[ESPIOTAddress alloc]initWithBssid:bssid InetAddress:rootInetAddress IsMeshDevice:YES];
-        [iotAddress setParentBssid:parentBssid];
-        [iotAddress setDeviceType:deviceType];
+        iotAddress.espParentBssid = parentBssid;
+        iotAddress.espDeviceType = deviceType;
         _iotAddress = iotAddress;
         _childrenCount = childrenCount;
         _isProcessing = NO;
@@ -76,7 +76,7 @@
 {
     if ([_childrenArray containsObject:child]) {
         if (DEBUG_ON) {
-            NSLog(@"ESPMeshNetUtil2 WARN: MeshDevice bssid: %@ has gotten the child bssid %@ already",[_iotAddress bssid],[[child iotAddress] bssid]);
+            NSLog(@"ESPMeshNetUtil2 WARN: MeshDevice bssid: %@ has gotten the child bssid %@ already",_iotAddress.espBssid,child.iotAddress.espBssid);
         }
         return NO;
     } else {
@@ -97,7 +97,7 @@
         _isSuc = YES;
         if (_failTime > 0) {
             if (DEBUG_ON) {
-                NSLog(@"ESPMeshNetUtil2 INFO MeshDevice %@ retry %D time suc",[_iotAddress bssid],_failTime);
+                NSLog(@"ESPMeshNetUtil2 INFO MeshDevice %@ retry %D time suc",_iotAddress.espBssid,_failTime);
             }
         }
     } else {
@@ -106,13 +106,13 @@
             _isProcessing = NO;
             _isProcessed = NO;
             if (DEBUG_ON) {
-                NSLog(@"ESPMeshNetUtil2 DEBUG %@ retry %d time...",[_iotAddress bssid],_failTime);
+                NSLog(@"ESPMeshNetUtil2 DEBUG %@ retry %d time...",_iotAddress.espBssid,_failTime);
             }
         } else {
             _isProcessed = YES;
             _isSuc = NO;
             if (DEBUG_ON) {
-                NSLog(@"ESPMeshNetUtil2 WARN %@ retry %d time fail",[_iotAddress bssid],_failTime);
+                NSLog(@"ESPMeshNetUtil2 WARN %@ retry %d time fail",_iotAddress.espBssid,_failTime);
             }
         }
     }
@@ -135,9 +135,9 @@
 - (NSString *) description
 {
     NSMutableString *mstr = [[NSMutableString alloc]init];
-    [mstr appendFormat:@"[MeshDevice bssid: %@, children bssids: ",[_iotAddress bssid]];
+    [mstr appendFormat:@"[MeshDevice bssid: %@, children bssids: ",_iotAddress.espBssid];
     for (MeshDevice *child in _childrenArray) {
-        [mstr appendFormat:@"%@, ",[[child iotAddress] bssid]];
+        [mstr appendFormat:@"%@, ",child.iotAddress.espBssid];
     }
     [mstr appendString:@"]"];
     
@@ -284,7 +284,7 @@
 {
     for (MeshDevice *meshDevice in meshDeviceArray) {
         ESPIOTAddress *iotAddress = [meshDevice iotAddress];
-        [iotAddress setRootBssid:rootBssid];
+        iotAddress.espRootBssid = rootBssid;
     }
 }
 
@@ -307,7 +307,7 @@
             }
             
         }
-//        NSLog(@"bh ESPMeshNetUtil2 isMoreDevices() totalNum: %d, totalProcessing: %d, totalSuc: %d, totalFail: %d",totalNum,totalProcessing,totalSuc,totalFail);
+        //        NSLog(@"bh ESPMeshNetUtil2 isMoreDevices() totalNum: %d, totalProcessing: %d, totalSuc: %d, totalFail: %d",totalNum,totalProcessing,totalSuc,totalFail);
         return totalNum > totalProcessing + totalSuc + totalFail;
     }
 }
@@ -382,7 +382,7 @@
     // query root mesh device
     MeshDevice *rootDevice = [self queryMeshDevice:rootInetAddr Bssid:rootBssid];
     
-    [[rootDevice iotAddress] setParentBssid:nil];
+    rootDevice.iotAddress.espParentBssid = nil;
     
     NSMutableArray *meshDeviceArrayAtomic = [[NSMutableArray alloc]init];
     
@@ -480,7 +480,7 @@
         @synchronized(meshDeviceArrayAtomic) {
             hasDeviceProcessing = [self hasDeviceProcessing:meshDeviceArrayAtomic];
         }
-
+        
     }
     
     [self buildResultArray:iotAddressArray DeviceArray:meshDeviceArrayAtomic];
@@ -539,8 +539,8 @@
 - (void) run
 {
     // query mesh device
-    NSString *inetAddr = [[_freshDevice iotAddress] inetAddress];
-    NSString *deviceBssid = [[_freshDevice iotAddress] bssid];
+    NSString *inetAddr = _freshDevice.iotAddress.espInetAddress;
+    NSString *deviceBssid = _freshDevice.iotAddress.espBssid;
     MeshDevice *queryDevice = [ESPMeshNetUtil2 queryMeshDevice:inetAddr Bssid:deviceBssid];
     // process query device
     if (queryDevice == nil) {

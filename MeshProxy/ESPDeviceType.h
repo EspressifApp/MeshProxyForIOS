@@ -8,29 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
-enum ESPDeivceTypeEnum
+typedef enum ESPDeivceTypeEnum
 {
-    NEW,
-    ROOT,
-    PLUG,
-    LIGHT,
-    HUMITURE,
-    FLAMMABLE,
-    VOLTAGE,
-    REMOTE,
-    PLUGS
-};
+    NEW_ESP_DEVICETYPE,
+    ROOT_ESP_DEVICETYPE,
+    PLUG_ESP_DEVICETYPE,
+    LIGHT_ESP_DEVICETYPE,
+    HUMITURE_ESP_DEVICETYPE,
+    FLAMMABLE_ESP_DEVICETYPE,
+    VOLTAGE_ESP_DEVICETYPE,
+    REMOTE_ESP_DEVICETYPE,
+    PLUGS_ESP_DEVICETYPE,
+    SOUNDBOX_ESP_DEVICETYPE
+} ESPDeviceTypeEnum;
 
-typedef enum ESPDeivceTypeEnum ESPDeviceTypeEnum;
+@interface ESPDeviceType : NSObject<NSCopying>
 
-@interface ESPDeviceType : NSObject
+@property (nonatomic, assign) int espSerial;
+@property (nonatomic, assign) BOOL espIsLocalSupport;
 
-@property (nonatomic, assign) int serial;
-@property (nonatomic, assign) BOOL isLocalSupport;
-
-- (instancetype)initWithSerial:(int) serial TypeName:(NSString *) typeName IsLocalSupport:(BOOL) isLocalSupport;
-
-- (ESPDeviceTypeEnum)typeEnum;
+- (ESPDeviceTypeEnum)espTypeEnum;
 
 + (ESPDeviceType *)resolveDeviceTypeBySerial:(int) serial;
 

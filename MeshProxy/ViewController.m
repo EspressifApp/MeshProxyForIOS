@@ -37,9 +37,9 @@
         } else {
             NSLog(@"ViewController discover %d devices",(int)deviceCount);
             ESPIOTAddress *iotAddress = [deviceArray objectAtIndex:0];
-            NSString *bssid = [iotAddress bssid];
+            NSString *bssid = iotAddress.espBssid;
             
-            NSString *inetAddress = [iotAddress inetAddress];
+            NSString *inetAddress = iotAddress.espInetAddress;
             
             NSString *url = [NSString stringWithFormat:@"http://%@/config?command=light",inetAddress];
             

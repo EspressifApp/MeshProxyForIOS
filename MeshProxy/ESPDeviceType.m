@@ -24,15 +24,16 @@
     static NSArray *TypeEnumArray;
     dispatch_once(&predicate, ^{
         TypeEnumArray = [[NSArray alloc]initWithObjects:
-                         [[NSNumber alloc]initWithInt:NEW],
-                         [[NSNumber alloc]initWithInt:ROOT],
-                         [[NSNumber alloc]initWithInt:PLUG],
-                         [[NSNumber alloc]initWithInt:LIGHT],
-                         [[NSNumber alloc]initWithInt:HUMITURE],
-                         [[NSNumber alloc]initWithInt:FLAMMABLE],
-                         [[NSNumber alloc]initWithInt:VOLTAGE],
-                         [[NSNumber alloc]initWithInt:REMOTE],
-                         [[NSNumber alloc]initWithInt:PLUGS],
+                         [[NSNumber alloc]initWithInt:NEW_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:ROOT_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:PLUG_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:LIGHT_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:HUMITURE_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:FLAMMABLE_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:VOLTAGE_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:REMOTE_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:PLUGS_ESP_DEVICETYPE],
+                         [[NSNumber alloc]initWithInt:SOUNDBOX_ESP_DEVICETYPE],
                          nil];
     });
     return TypeEnumArray;
@@ -44,16 +45,17 @@
     static NSArray *SerialArray;
     dispatch_once(&predicate, ^{
         SerialArray = [[NSArray alloc]initWithObjects:
-                         [[NSNumber alloc]initWithInt:-1],
-                         [[NSNumber alloc]initWithInt:-2],
-                         [[NSNumber alloc]initWithInt:23701],
-                         [[NSNumber alloc]initWithInt:45772],
-                         [[NSNumber alloc]initWithInt:12335],
-                         [[NSNumber alloc]initWithInt:3835],
-                         [[NSNumber alloc]initWithInt:68574],
-                         [[NSNumber alloc]initWithInt:2355],
-                         [[NSNumber alloc]initWithInt:47446],
-                         nil];
+                       [[NSNumber alloc]initWithInt:-1],
+                       [[NSNumber alloc]initWithInt:-2],
+                       [[NSNumber alloc]initWithInt:23701],
+                       [[NSNumber alloc]initWithInt:45772],
+                       [[NSNumber alloc]initWithInt:12335],
+                       [[NSNumber alloc]initWithInt:3835],
+                       [[NSNumber alloc]initWithInt:68574],
+                       [[NSNumber alloc]initWithInt:2355],
+                       [[NSNumber alloc]initWithInt:47446],
+                       [[NSNumber alloc]initWithInt:43902],
+                       nil];
     });
     return SerialArray;
 }
@@ -73,6 +75,7 @@
                          @"Voltage",
                          @"Remote",
                          @"Plugs",
+                         @"Soundbox",
                          nil];
     });
     return TypeNameArray;
@@ -91,6 +94,7 @@
                                [[NSNumber alloc]initWithBool:NO],
                                [[NSNumber alloc]initWithBool:NO],
                                [[NSNumber alloc]initWithBool:NO],
+                               [[NSNumber alloc]initWithBool:YES],
                                [[NSNumber alloc]initWithBool:YES],
                                [[NSNumber alloc]initWithBool:YES],
                                nil];
@@ -113,8 +117,9 @@
             int serial = [[SerialArray objectAtIndex:i]intValue];
             NSString *typeName = [TypeNameArray objectAtIndex:i];
             BOOL isLocalSupport = [[IsLocalSupportArray objectAtIndex:i]boolValue];
+            ESPDeviceTypeEnum typeEnum = [[TypeEnumArray objectAtIndex:i]intValue];
             // deviceType is const in DeviceTypeArray
-            const ESPDeviceType* const deviceType = [[ESPDeviceType alloc]initWithSerial:serial TypeName:typeName IsLocalSupport:isLocalSupport];
+            const ESPDeviceType* const deviceType = [[ESPDeviceType alloc]initWithSerial:serial TypeName:typeName IsLocalSupport:isLocalSupport TypeEnum:typeEnum];
             [tempArray addObject:deviceType];
         }
         DeviceTypeArray = [tempArray copy];
@@ -127,18 +132,19 @@
     abort();
 }
 
-- (instancetype)initWithSerial:(int) serial TypeName:(NSString *) typeName IsLocalSupport:(BOOL) isLocalSupport
+- (instancetype)initWithSerial:(int) serial TypeName:(NSString *) typeName IsLocalSupport:(BOOL) isLocalSupport TypeEnum:(ESPDeviceTypeEnum) typeEnum;
 {
     self = [super init];
     if (self) {
-        _serial = serial;
+        _espSerial = serial;
         _typeName = typeName;
-        _isLocalSupport = isLocalSupport;
+        _espIsLocalSupport = isLocalSupport;
+        _typeEnum = typeEnum;
     }
     return self;
 }
 
-- (ESPDeviceTypeEnum)typeEnum
+- (ESPDeviceTypeEnum)espTypeEnum
 {
     return _typeEnum;
 }
@@ -185,7 +191,7 @@
 
 - (BOOL)isEqual:(id)object
 {
- 
+    
     if (self == object) {
         return YES;
     }
@@ -195,8 +201,20 @@
     
     const ESPDeviceType *other = object;
     return _typeEnum == other.typeEnum;
-
     
+    
+}
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    ESPDeviceType *copy = [[self class]allocWithZone:zone];
+    if (copy) {
+        copy.espSerial = self.espSerial;
+        copy.espIsLocalSupport = self.espIsLocalSupport;
+        copy.typeEnum = self.typeEnum;
+        copy.typeName = self.typeName;
+    }
+    return copy;
 }
 
 - (NSString *)description

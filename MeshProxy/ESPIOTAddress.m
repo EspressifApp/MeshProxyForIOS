@@ -11,7 +11,7 @@
 @implementation ESPIOTAddress
 
 
-+ (ESPIOTAddress *)EmptyIOTAddress
++ (ESPIOTAddress *)EspEmptyIOTAddress
 {
     static dispatch_once_t predicate;
     static ESPIOTAddress *EmptyIOTAddress;
@@ -35,9 +35,9 @@
 {
     self = [super init];
     if (self) {
-        _bssid = bssid;
-        _inetAddress = inetAddress;
-        _isMeshDevice = isMeshDevice;
+        _espBssid = bssid;
+        _espInetAddress = inetAddress;
+        _espIsMeshDevice = isMeshDevice;
     }
     return self;
 }
@@ -52,7 +52,7 @@
     }
     
     const ESPIOTAddress *other = object;
-    if ([_deviceType isEqual:other.deviceType] && [_bssid isEqualToString:other.bssid]) {
+    if ([_espDeviceType isEqual:other.espDeviceType] && [_espBssid isEqualToString:other.espBssid]) {
         return YES;
     } else {
         return NO;
@@ -61,12 +61,12 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"bssid:%@,InetAddress:%@,DeviceType:%@,parentBssid:%@",_bssid,_inetAddress,_deviceType,_parentBssid];
+    return [NSString stringWithFormat:@"bssid:%@,InetAddress:%@,DeviceType:%@,parentBssid:%@",_espBssid,_espInetAddress,_espDeviceType,_espParentBssid];
 }
 
 - (NSUInteger)hash
 {
-    return [_bssid hash];
+    return [_espBssid hash];
 }
 
 @end

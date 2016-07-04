@@ -63,7 +63,7 @@
                         NSString *respBssid = [ESPUDPDataParser resolveBssid:responseStr];
                         BOOL respIsMesh = [ESPUDPDataParser resolveIsMesh:responseStr];
                         ESPIOTAddress *respIOTAddress = [[ESPIOTAddress alloc]initWithBssid:respBssid InetAddress:respInetAddress IsMeshDevice:respIsMesh];
-                        [respIOTAddress setDeviceType:respDeviceType];
+                        respIOTAddress.espDeviceType = respDeviceType;
                         
                         [responseSet addObject:respIOTAddress];
                     }
